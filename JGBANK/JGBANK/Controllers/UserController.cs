@@ -86,7 +86,8 @@ namespace JGBANK.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Usuario o Contraseña Erroneos!");
+
+                return BadRequest("Error al conectar con el Servidor!");
             }
         }
         [Route("[controller]/EliminarUsuario/{token}")]
@@ -105,6 +106,24 @@ namespace JGBANK.Controllers
             catch (Exception)
             {
                 return BadRequest("Error de Conexion con el Servidor!");
+            }
+        }
+        [Route("[controller]/GetUsuariosConCuentasTarjetas/{token}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUsuariosConCuentasTarjetas(int numdoc,string token)
+        {
+            try
+            {
+                if (!_userInterface.VerificarToken(token))
+                {
+                    return BadRequest("Error al validad Identidad");
+                }
+                dtoUsuarioCuentaTarjeta dut = await _userInterface.GetUsuariosConCuentasTarjetas(numdoc);
+                return Ok(dut);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error al conectar con el Servidor!");
             }
         }
     }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace JGBANK.DTO
 {
-    public class dtoUsuario
+    public class dtoUsuarioCuentaTarjeta
     {
         public string nombre { get; set; }
         public string apellido { get; set; }
@@ -17,8 +17,10 @@ namespace JGBANK.DTO
         public string email { get; set; }
         public string contrasenia { get; set; }
 
-        public bool estado { get; set; }
         public string token { get; set; }
 
+        public List<dtoCuenta> Cuentas { get; set; }
+
+        public List<dtoTarjeta> Tarjetas { get; set; }
     }
 }

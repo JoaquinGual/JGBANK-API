@@ -15,14 +15,16 @@ namespace JGBANK.Controllers
     {
         private readonly IAccountInterface _accountInterface;
         private readonly IUserInterface _userInterface;
+        
         public AccountController(IAccountInterface accountInterface, IUserInterface userInterface)
         {
             _accountInterface = accountInterface;
             _userInterface = userInterface;
+            
         }
         [Route("[controller]/CrearCuenta/{token}")]
         [HttpPost]
-        public async Task<IActionResult> CrearCuenta(dtoCuenta c,string token)
+        public async Task<IActionResult> CrearCuenta(int idTipo, int idUsuario, double saldo, bool estado, string token)
         {
             try
             {
@@ -30,7 +32,7 @@ namespace JGBANK.Controllers
                 {
                     return BadRequest("Error al validad Identidad");
                 }
-                Cuenta account = await _accountInterface.crearCuenta(c);
+                dtoCuenta account = await _accountInterface.crearCuenta(idTipo,  idUsuario,  saldo, estado);
                 return Ok(account);
             }
             catch (Exception)

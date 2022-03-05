@@ -27,6 +27,7 @@ namespace JGBANK.Models
         public string Email { get; set; }
         public string Contrasenia { get; set; }
         public string Token { get; set; }
+        public bool Estado { get; set; }
 
         public virtual Sexo IdSexoNavigation { get; set; }
         public virtual ICollection<Cuenta> Cuenta { get; set; }

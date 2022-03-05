@@ -11,6 +11,7 @@ namespace JGBANK.DTO
 
         public string numCuenta { get; set; }
         public int idTipo { get; set; }
+        public string tipoCuenta { get; set; }
         public int idUsuario { get; set; }
         public double saldo { get; set; }
         public bool estado { get; set; }

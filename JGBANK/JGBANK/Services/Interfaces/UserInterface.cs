@@ -19,10 +19,11 @@ namespace JGBANK.Services.Interfaces
 
         Task<dtoUsuario> LoginUser(string Email, string Contraseña);
 
-        Task<List<Usuario>> GetUsuariosConCuentas(int numdoc);
+        Task<dtoUsuarioCuentaTarjeta> GetUsuariosConCuentasTarjetas(int numdoc);
 
 
         bool VerificarToken(string token);
+
 
 
 

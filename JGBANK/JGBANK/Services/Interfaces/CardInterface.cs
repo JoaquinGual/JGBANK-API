@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace JGBANK.Services.Interfaces
 {
-    public interface IAccountInterface
+    public interface ICardInterface
     {
-        Task<dtoCuenta> crearCuenta(int idTipo,int idUsuario,double saldo,bool estado);
+        Task<dtoTarjeta> CrearTarjeta(int idTipo, bool estado, int idUsuario);
 
-        Task<string> EliminarCuenta(string numeroCuenta);
+        Task<string> SuspenderTarjeta(int idUsuario, string numTarjeta);
     }
-   
 }
