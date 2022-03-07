@@ -268,3 +268,6 @@ D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\obj\Debug\net5.0\staticwebassets\JGBANK.St
 D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\obj\Debug\net5.0\JGBANK.RazorTargetAssemblyInfo.cache
 D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\obj\Debug\net5.0\JGBANK.csproj.CopyComplete
 D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\obj\Debug\net5.0\JGBANK.genruntimeconfig.cache
+D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\bin\Debug\net5.0\System.Drawing.Common.dll
+D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\GITKRAKEN\JGBANK-API\JGBANK\JGBANK\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll

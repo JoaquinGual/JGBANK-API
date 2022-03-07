@@ -165,7 +165,24 @@ namespace JGBANK.Services
                 return u;
             }
         }
-
+        public async Task<Usuario> cargarFoto(int idUsuario, byte[] foto)
+        {
+            using (var context = new JGBANKContext())
+            {
+                Usuario u = context.Usuarios.Where(x => x.IdUsuario == idUsuario).First();
+                u.FotoPerfil = foto;
+                context.SaveChanges();
+                return u;
+            }
+        }
+        public async Task<Usuario> getUserByID(int idUsuario)
+        {
+            using (var context = new JGBANKContext())
+            {
+                Usuario u = context.Usuarios.Where(x => x.IdUsuario == idUsuario).First();                
+                return u;
+            }
+        }
         public async Task<Usuario> RegistrarUsuario(dtoUsuario user)
         {
             await using (var context = new JGBANKContext())

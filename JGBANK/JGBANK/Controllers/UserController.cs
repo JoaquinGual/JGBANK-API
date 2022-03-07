@@ -5,8 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Data;
+
 
 namespace JGBANK.Controllers
 {
@@ -77,7 +81,7 @@ namespace JGBANK.Controllers
         }
         [Route("[controller]/LoginUser")]
         [HttpGet]
-        public async Task<IActionResult> LoginUser(string Email, string Contraseña)
+        public async Task<IActionResult> LoginUser(string Email, string Contraseña,IFormFile foto)
         {
             try
             {   
@@ -125,6 +129,84 @@ namespace JGBANK.Controllers
             {
                 return BadRequest("Error al conectar con el Servidor!");
             }
+        }
+
+
+        [Route("[controller]/CargarFoto")]
+        [HttpPost]      
+        public async Task<byte[]> FileUpload(IFormFile file, int idUsuario)
+        {         
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                using (var img = Image.FromStream(memoryStream))
+                {
+                    await _userInterface.cargarFoto(idUsuario, Image2Bytes(img));
+                    return Image2Bytes(img);
+                }
+            }
+        }
+        [Route("[controller]/GetFoto")]
+        [HttpGet]
+        public async Task<string> getFoto(int idUsuario)
+        {
+            // Trata la información de la imagen para poder trasladarla al picturebox
+            
+            Usuario u =  await _userInterface.getUserByID(idUsuario);
+
+            using (Image image = Bytes2Image(u.FotoPerfil))
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    image.Save(m, image.RawFormat);
+                    byte[] imageBytes = m.ToArray();
+
+                    
+                    string base64String = Convert.ToBase64String(imageBytes);
+                    return base64String;
+                }
+            }           
+
+        }
+
+            
+        public static byte[] Image2Bytes(Image pImagen)
+        {
+            byte[] mImage;
+            try
+            {
+                if (pImagen != null)
+                {
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                    {
+                        pImagen.Save(ms, pImagen.RawFormat);
+                        mImage = ms.GetBuffer();
+                        ms.Close();
+                    }
+                }
+                else { mImage = null; }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            return mImage;
+        }
+        public static Image Bytes2Image(byte[] bytes)
+        {
+            if (bytes == null) return null;
+            //
+            MemoryStream ms = new MemoryStream(bytes);
+            Bitmap bm = null;
+            try
+            {
+                bm = new Bitmap(ms);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return bm;
         }
     }
 }
