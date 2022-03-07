@@ -41,6 +41,9 @@ namespace JGBANK
             services.AddTransient<IUserInterface, UserService>();
             services.AddTransient<IAccountInterface,AccountService>();
             services.AddTransient<ICardInterface,CardService>();
+            services.AddTransient<ITransferInterface, TransferService>();
+            services.AddTransient<IPhoneInterface, PhoneService>();
+            services.AddTransient<IAddressInterface, AddressService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

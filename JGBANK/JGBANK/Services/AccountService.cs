@@ -33,13 +33,13 @@ namespace JGBANK.Services
 
         }
 
-        public async Task<string> EliminarCuenta(string numeroCuenta)
+        public async Task<string> EliminarCuenta(int idUsuario,string numeroCuenta)
         {
-
+            
             using (var context = new JGBANKContext())
             {
                 string respuesta = "";
-                Cuenta c = context.Cuentas.Where(u => u.NumCuenta == numeroCuenta).First();
+                Cuenta c = context.Cuentas.Where(c => c.NumCuenta == numeroCuenta && c.IdUsuario == idUsuario).First();
                 if (c != null)
                 {
                     c.Estado = false;
@@ -49,7 +49,7 @@ namespace JGBANK.Services
                 }
                 else
                 {
-                    respuesta = "Cuenta no encontrada!";
+                    respuesta = "Cuenta no encontrada!"; 
                 }
 
 
@@ -58,6 +58,17 @@ namespace JGBANK.Services
             }
 
         }
+
+        public async Task<dtoCuenta> getCuentaByNumCuenta(string numCuenta)
+        {
+            await using (var context = new JGBANKContext())
+            {
+                Cuenta c = context.Cuentas.Where(x => x.NumCuenta == numCuenta).First();
+                return MapCuentaToDtoCuenta(c);
+            }
+                
+        }
+
         private dtoCuenta MapCuentaToDtoCuenta(Cuenta c)
         {
             TiposCuenta TC = new TiposCuenta();
@@ -76,6 +87,15 @@ namespace JGBANK.Services
             dc.estado =dc.estado;
            
             return dc;
+        }
+
+        public bool getEstadoCuenta(int idCuenta)
+        {
+            using (var context = new JGBANKContext())
+            {
+                Cuenta c = context.Cuentas.Where(c => c.IdCuenta == idCuenta).First();
+                return c.Estado;
+            }
         }
     }
 }
