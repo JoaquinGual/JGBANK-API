@@ -216,6 +216,7 @@ namespace JGBANK.Services
                 u.Contrasenia = user.contrasenia;
                 u.Estado = true;
 
+
                 //Filtra por nrodoc, Usuario Creado arriba
                 context.Usuarios.Add(u);
                 context.SaveChanges();
