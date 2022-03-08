@@ -12,6 +12,6 @@ namespace JGBANK.Services.Interfaces
         Task<List<dtoTelefono>> GetTelefonos(int idUsuario);
 
         List<dtoTelefono> MapListTelefonoToListDtoTelefono(List<Telefono> LT);
-        List<Telefono> MapListDtoTelefonoToListTelefono(List<dtoTelefono> LT);
+        List<Telefono> MapListDtoTelefonoToListTelefono(List<dtoTelefono> LT, int idUsuario);
     }
 }

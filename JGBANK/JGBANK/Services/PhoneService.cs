@@ -20,14 +20,14 @@ namespace JGBANK.Services
 
         }
 
-        public List<Telefono> MapListDtoTelefonoToListTelefono(List<dtoTelefono> LT)
+        public List<Telefono> MapListDtoTelefonoToListTelefono(List<dtoTelefono> LT,int idUsuario)
         {
             List<Telefono> LD = new List<Telefono>();
             for (int i = 0; i < LT.Count(); i++)
             {
                 Telefono t = new Telefono();
                 t.IdTelefono = LT[i].idTelefono;
-                t.IdUsuario = LT[i].idUsuario;
+                t.IdUsuario = idUsuario;
                 t.NumTel = LT[i].numTel;
 
                 LD.Add(t);
@@ -36,7 +36,7 @@ namespace JGBANK.Services
             return LD;
         }
 
-        private List<dtoTelefono> MapListTelefonoToListDtoTelefono(List<Telefono> LT)
+        public List<dtoTelefono> MapListTelefonoToListDtoTelefono(List<Telefono> LT)
         {
             List<dtoTelefono> LDT = new List<dtoTelefono>();
             for (int i = 0; i < LT.Count(); i++)
@@ -50,11 +50,6 @@ namespace JGBANK.Services
             }
 
             return LDT;
-        }
-
-        List<dtoTelefono> IPhoneInterface.MapListTelefonoToListDtoTelefono(List<Telefono> LT)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -10,6 +10,9 @@ namespace JGBANK.Services.Interfaces
     public interface IAddressInterface
     {
         Task<List<dtoDireccion>> GetDirecciones(int idUsuario);
-        List<Direccione> MapListDtoDireccionToListDireccion(List<dtoDireccion> LD);
+        List<Direccione> MapListDtoDireccionToListDireccion(List<dtoDireccion> LTD, int idUsuario);
+
+        List<dtoDireccion> MapListDireccioneToListDtoDireccion(List<Direccione> LD);
+
     }
 }

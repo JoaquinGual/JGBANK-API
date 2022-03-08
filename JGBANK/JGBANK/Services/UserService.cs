@@ -216,26 +216,31 @@ namespace JGBANK.Services
                 u.Contrasenia = user.contrasenia;
                 u.Estado = true;
 
+                //Filtra por nrodoc, Usuario Creado arriba
+                context.Usuarios.Add(u);
+                context.SaveChanges();
+                Usuario us = context.Usuarios.Where(x => x.Numdoc == u.Numdoc).First();
+                
+
                 //Registrar Telefonos
 
-                List<Telefono> LT =  _phoneInterface.MapListDtoTelefonoToListTelefono(user.LT);
+                List<Telefono> LT =  _phoneInterface.MapListDtoTelefonoToListTelefono(user.LT,us.IdUsuario);
 
                 for (int i = 0; i < LT.Count(); i++)
                 {
                     context.Telefonos.Add(LT[i]);
                 }
-                 
-                
+
+
                 //Registar Direciones
+                List<Direccione> LD = _addressInterface.MapListDtoDireccionToListDireccion(user.LD,us.IdUsuario);
                 for (int i = 0; i < user.LD.Count(); i++)
                 {
-                    context.Direcciones.Add(user.LD[i]);
+                    context.Direcciones.Add(LD[i]);
                 }
-                context.Usuarios.Add(u);
                 context.SaveChanges();
 
-                //Filtra por nrodoc, Usuario Creado arriba
-                Usuario us = context.Usuarios.Where(x => x.Numdoc == u.Numdoc).First();
+
 
                 //Crea cuenta en pesos para ese Usuario
                 dtoCuenta dc = new dtoCuenta();

@@ -19,8 +19,9 @@ namespace JGBANK.Services
             }
         }
 
-      
-        private List<dtoDireccion> MapListDireccioneToListDtoDireccion(List<Direccione> LD)
+       
+
+        public List<dtoDireccion> MapListDireccioneToListDtoDireccion(List<Direccione> LD)
         {
             List<dtoDireccion> LDD = new List<dtoDireccion>();
             for (int i = 0; i < LD.Count(); i++)
@@ -32,8 +33,26 @@ namespace JGBANK.Services
                 dd.numero = LD[i].Numero;
                 LDD.Add(dd);
             }
-           
+
             return LDD;
         }
+
+        public List<Direccione> MapListDtoDireccionToListDireccion(List<dtoDireccion> LTD, int idUsuario)
+        {
+            List<Direccione> LD = new List<Direccione>();
+            for (int i = 0; i < LTD.Count(); i++)
+            {
+                Direccione d = new Direccione();
+                d.IdDireccion = LTD[i].idDireccion;
+                d.IdUsuario = idUsuario;
+                d.Calle = LTD[i].calle;
+                d.Numero = LTD[i].numero;
+                LD.Add(d);
+            }
+
+            return LD;
+        }
+
+        
     }
 }
