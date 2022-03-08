@@ -11,7 +11,12 @@ namespace JGBANK.Services.Interfaces
     {
         Task<dtoCuenta> crearCuenta(int idTipo,int idUsuario,double saldo,bool estado);
 
-        Task<string> EliminarCuenta(string numeroCuenta);
+        Task<string> EliminarCuenta(int idUsuario, string numeroCuenta);
+
+        Task<dtoCuenta> getCuentaByNumCuenta(string numCuenta);
+
+        bool getEstadoCuenta(int idCuenta);
+
     }
    
 }

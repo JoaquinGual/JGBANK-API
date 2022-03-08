@@ -13,23 +13,37 @@ namespace JGBANK.Services
 
         private readonly IAccountInterface _accountInterface;
         private readonly ICardInterface _cardInterface;
-        public UserService(IAccountInterface accountInterface, ICardInterface cardInterface)
+        private readonly IAddressInterface _addressInterface;
+        private readonly IPhoneInterface _phoneInterface;
+        public UserService(IAccountInterface accountInterface, ICardInterface cardInterface, IAddressInterface addressInterface, IPhoneInterface phoneInterface)
         {
             _accountInterface = accountInterface;
             _cardInterface = cardInterface;
-        }
+              _addressInterface = addressInterface;
+            _phoneInterface = phoneInterface;
+    }
         public async Task<string> EliminarUsuario(long dni)
         {
 
-
-
+            //Cuando se elimina un usuario por defecto se dan de baja todas sus tarjetas y su cuentas vigentes
             using (var context = new JGBANKContext())
             {
                 string respuesta = "";
                 Usuario u = context.Usuarios.Where(u => u.Numdoc == dni).First();
+                List<Tarjeta> LT = context.Tarjetas.Where(t => t.IdUsuario == u.IdUsuario).ToList();
+                List<Cuenta> LC = context.Cuentas.Where(c => c.IdUsuario == u.IdUsuario).ToList();
                 if (u != null)
                 {
                     u.Estado = false;
+                    for (int i = 0; i < LT.Count(); i++)
+                    {
+                       await _cardInterface.SuspenderTarjeta(u.IdUsuario, LT[i].NumTarjeta);
+                        
+                    }
+                    for (int i = 0; i < LC.Count(); i++)
+                    {
+                        await _accountInterface.EliminarCuenta(u.IdUsuario, LC[i].NumCuenta);
+                    }
                     context.SaveChanges();
                     respuesta = "Usuario eliminado con exito!";
                     
@@ -56,7 +70,7 @@ namespace JGBANK.Services
                 for (int i = 0; i < context.Usuarios.Count(); i++)
                 {
 
-                    LDU.Add(MapUsuarioToDtoUsuario(LU[i]));
+                    LDU.Add(await MapUsuarioToDtoUsuario(LU[i]));
                 }
                 return LDU;
 
@@ -97,8 +111,10 @@ namespace JGBANK.Services
             {
                 Usuario u = new Usuario();
                 dtoUsuario du = new dtoUsuario();
+                
 
                 u = context.Usuarios.Where(d => d.Email == Email && d.Contrasenia == Contraseña && d.Estado == true).First();
+
 
                 if (u != null)
                 {
@@ -109,7 +125,7 @@ namespace JGBANK.Services
 
 
 
-                return MapUsuarioToDtoUsuario(u);
+                return await MapUsuarioToDtoUsuario(u);
             }
         }
 
@@ -183,7 +199,7 @@ namespace JGBANK.Services
                 return u;
             }
         }
-        public async Task<Usuario> RegistrarUsuario(dtoUsuario user)
+        public async Task<Usuario> RegistrarUsuario(dtoUsuario user/*, List<Telefono> LT, List<Direccione> LD*/)
         {
             await using (var context = new JGBANKContext())
             {
@@ -199,11 +215,32 @@ namespace JGBANK.Services
                 u.Email = user.email;
                 u.Contrasenia = user.contrasenia;
                 u.Estado = true;
-                context.Usuarios.Add(u);
-                context.SaveChanges();
 
                 //Filtra por nrodoc, Usuario Creado arriba
+                context.Usuarios.Add(u);
+                context.SaveChanges();
                 Usuario us = context.Usuarios.Where(x => x.Numdoc == u.Numdoc).First();
+                
+
+                //Registrar Telefonos
+
+                List<Telefono> LT =  _phoneInterface.MapListDtoTelefonoToListTelefono(user.LT,us.IdUsuario);
+
+                for (int i = 0; i < LT.Count(); i++)
+                {
+                    context.Telefonos.Add(LT[i]);
+                }
+
+
+                //Registar Direciones
+                List<Direccione> LD = _addressInterface.MapListDtoDireccionToListDireccion(user.LD,us.IdUsuario);
+                for (int i = 0; i < user.LD.Count(); i++)
+                {
+                    context.Direcciones.Add(LD[i]);
+                }
+                context.SaveChanges();
+
+
 
                 //Crea cuenta en pesos para ese Usuario
                 dtoCuenta dc = new dtoCuenta();
@@ -321,21 +358,38 @@ namespace JGBANK.Services
 
 
         }
-        private dtoUsuario MapUsuarioToDtoUsuario(Usuario u)
+        private async Task<dtoUsuario> MapUsuarioToDtoUsuario(Usuario u)
         {
-            dtoUsuario du = new dtoUsuario();
-            du.nombre = u.Nombre;
-            du.apellido = u.Apellido;
-            du.numdoc = u.Numdoc;
-            du.tipodoc = u.Tipodoc;
-            du.fechaNac = u.FechaNac;
-            du.idSexo = u.IdSexo;
-            du.cuil = u.Cuil;
-            du.email = u.Email;
-            du.contrasenia = u.Contrasenia;
-            du.estado = u.Estado;
-            du.token = u.Token;
-            return du;
+           using (var context = new JGBANKContext())
+            {
+                dtoUsuario du = new dtoUsuario();
+                du.nombre = u.Nombre;
+                du.apellido = u.Apellido;
+                du.numdoc = u.Numdoc;
+                du.tipodoc = u.Tipodoc;
+                du.fechaNac = u.FechaNac;
+                du.idSexo = u.IdSexo;
+                
+                du.cuil = u.Cuil;
+                du.email = u.Email;
+                du.contrasenia = u.Contrasenia;
+                du.LT = await _phoneInterface.GetTelefonos(u.IdUsuario);
+                du.LD = await _addressInterface.GetDirecciones(u.IdUsuario);
+                du.estado = u.Estado;
+                du.token = u.Token;
+
+                return du;
+            }
+        }
+        
+        public bool GetEstadoUsuario(int idUsuario)
+        {
+            using (var context = new JGBANKContext())
+            {
+                Usuario u = context.Usuarios.Where(u => u.IdUsuario == idUsuario).First();
+                return u.Estado;
+            }
+                
         }
     }
 }

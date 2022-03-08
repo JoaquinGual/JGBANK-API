@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JGBANK.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,9 +14,14 @@ namespace JGBANK.DTO
         public int tipodoc { get; set; }
         public DateTime fechaNac { get; set; }
         public int idSexo { get; set; }
+        public string sexo { get; set; }
         public long cuil { get; set; }
         public string email { get; set; }
         public string contrasenia { get; set; }
+
+        public List<dtoTelefono> LT { get; set; }
+
+        public List<dtoDireccion> LD { get; set; }
 
         public bool estado { get; set; }
         public string token { get; set; }

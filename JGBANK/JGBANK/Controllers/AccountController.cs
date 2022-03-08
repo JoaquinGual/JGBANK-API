@@ -42,7 +42,7 @@ namespace JGBANK.Controllers
         }
         [Route("[controller]/EliminarCuenta/{token}")]
         [HttpDelete]
-        public async Task<IActionResult> EliminarCuenta(string numCuenta, string token)
+        public async Task<IActionResult> EliminarCuenta(int idUsuario,string numCuenta, string token)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace JGBANK.Controllers
                 {
                     return BadRequest("Error al validad Identidad");
                 }
-                string mensaje = await _accountInterface.EliminarCuenta(numCuenta);
+                string mensaje = await _accountInterface.EliminarCuenta(idUsuario,numCuenta);
                 return Ok(mensaje);
             }
             catch (Exception)

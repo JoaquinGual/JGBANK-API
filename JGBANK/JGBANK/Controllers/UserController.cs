@@ -27,7 +27,7 @@ namespace JGBANK.Controllers
 
         [Route("[controller]/RegistrarUsuario")]
         [HttpPost]
-       public async Task<IActionResult> RegistrarUsuario(dtoUsuario u)
+        public async Task<IActionResult> RegistrarUsuario(dtoUsuario u/*[FromQuery] List<Telefono> LT, [FromQuery] List<Direccione> LD*/)
         {
                 
             try
@@ -81,10 +81,11 @@ namespace JGBANK.Controllers
         }
         [Route("[controller]/LoginUser")]
         [HttpGet]
-        public async Task<IActionResult> LoginUser(string Email, string Contraseña,IFormFile foto)
+        public async Task<IActionResult> LoginUser(string Email, string Contraseña)
         {
             try
-            {   
+            {
+                
                 dtoUsuario du = await _userInterface.LoginUser(Email,Contraseña);
                 return Ok(du);
             }
@@ -208,5 +209,7 @@ namespace JGBANK.Controllers
             }
             return bm;
         }
+
+       
     }
 }
