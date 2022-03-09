@@ -199,7 +199,7 @@ namespace JGBANK.Services
                 return u;
             }
         }
-        public async Task<Usuario> RegistrarUsuario(dtoUsuario user/*, List<Telefono> LT, List<Direccione> LD*/)
+        public async Task<dtoUsuario> RegistrarUsuario(dtoUsuario user/*, List<Telefono> LT, List<Direccione> LD*/)
         {
             await using (var context = new JGBANKContext())
             {
@@ -216,11 +216,12 @@ namespace JGBANK.Services
                 u.Contrasenia = user.contrasenia;
                 u.Estado = true;
 
+                
                 //Filtra por nrodoc, Usuario Creado arriba
                 context.Usuarios.Add(u);
                 context.SaveChanges();
                 Usuario us = context.Usuarios.Where(x => x.Numdoc == u.Numdoc).First();
-                
+           
 
                 //Registrar Telefonos
 
@@ -258,7 +259,8 @@ namespace JGBANK.Services
                 await _cardInterface.CrearTarjeta(dt.idTipo,dt.estado,dt.idUsuario);
 
                 //Retorna el Usuario Completo
-                return u;
+                return await  MapUsuarioToDtoUsuario(u);
+                  
             }
 
         }
@@ -285,6 +287,7 @@ namespace JGBANK.Services
         {
             dtoUsuarioCuentaTarjeta uct = new dtoUsuarioCuentaTarjeta();
 
+            uct.idUsuario = u.IdUsuario;
             uct.nombre = u.Nombre;
             uct.apellido = u.Apellido;
             uct.numdoc = u.Numdoc;
@@ -363,13 +366,15 @@ namespace JGBANK.Services
            using (var context = new JGBANKContext())
             {
                 dtoUsuario du = new dtoUsuario();
+                Sexo s = context.Sexos.Where(s => s.IdSexo == u.IdSexo).First();
+                du.idUsuario = u.IdUsuario;
                 du.nombre = u.Nombre;
                 du.apellido = u.Apellido;
                 du.numdoc = u.Numdoc;
                 du.tipodoc = u.Tipodoc;
                 du.fechaNac = u.FechaNac;
                 du.idSexo = u.IdSexo;
-                
+                du.sexo = s.Sexo1;
                 du.cuil = u.Cuil;
                 du.email = u.Email;
                 du.contrasenia = u.Contrasenia;
