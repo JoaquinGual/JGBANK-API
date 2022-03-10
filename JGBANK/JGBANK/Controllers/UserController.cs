@@ -34,7 +34,7 @@ namespace JGBANK.Controllers
             {
                
 
-                Usuario user = await _userInterface.RegistrarUsuario(u);
+                dtoUsuario user = await _userInterface.RegistrarUsuario(u);
                 return Ok(user);
             }
             catch (Exception)

@@ -11,7 +11,7 @@ namespace JGBANK.Services.Interfaces
     public interface IUserInterface
     {
 
-        Task<Usuario> RegistrarUsuario(dtoUsuario user/*, List<Telefono> LT, List<Direccione> LD*/);
+        Task<dtoUsuario> RegistrarUsuario(dtoUsuario user/*, List<Telefono> LT, List<Direccione> LD*/);
         Task<string> EliminarUsuario(long dni);
         Task<Usuario> ModificarUsuario(dtoUsuario user);
 
