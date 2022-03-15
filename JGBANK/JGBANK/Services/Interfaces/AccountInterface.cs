@@ -17,6 +17,8 @@ namespace JGBANK.Services.Interfaces
 
         bool getEstadoCuenta(int idCuenta);
 
+        Task<List<dtoCuenta>> getCuentasActivas();
+
     }
    
 }

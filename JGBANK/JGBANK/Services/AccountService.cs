@@ -17,13 +17,13 @@ namespace JGBANK.Services
             using (var context = new JGBANKContext())
             {
                 Cuenta c = new Cuenta();
-
                 Random r = new Random();
                 c.NumCuenta = Convert.ToString(r.Next(10000, 99999));
                 c.IdTipo = idTipo;
                 c.IdUsuario = idUsuario;
                 c.Saldo = saldo;
                 c.Estado = estado;
+                
 
                 context.Cuentas.Add(c);
                 context.SaveChanges();
@@ -72,9 +72,11 @@ namespace JGBANK.Services
         private dtoCuenta MapCuentaToDtoCuenta(Cuenta c)
         {
             TiposCuenta TC = new TiposCuenta();
+            Usuario u = new Usuario(); 
             using (var context = new JGBANKContext())
             {
                 TC = context.TiposCuentas.Where(t => t.IdTipo == c.IdTipo).FirstOrDefault();
+                u = context.Usuarios.Where(u => u.IdUsuario == c.IdUsuario).First();
 
             }
             dtoCuenta dc = new dtoCuenta();
@@ -85,6 +87,7 @@ namespace JGBANK.Services
             dc.idUsuario = c.IdUsuario;
             dc.saldo = c.Saldo;
             dc.estado =dc.estado;
+            dc.nombreCompleto = u.Nombre + " " + u.Apellido;
            
             return dc;
         }
@@ -95,6 +98,23 @@ namespace JGBANK.Services
             {
                 Cuenta c = context.Cuentas.Where(c => c.IdCuenta == idCuenta).First();
                 return c.Estado;
+            }
+        }
+
+        public async Task<List<dtoCuenta>> getCuentasActivas()
+        {
+            using (var context = new JGBANKContext())
+            {
+                List<Cuenta> LC = context.Cuentas.Where(c => c.Estado == true).ToList();
+                List<dtoCuenta> LDC = new List<dtoCuenta>();
+
+                foreach (var c in LC)
+                {
+                    
+                    LDC.Add(MapCuentaToDtoCuenta(c));
+                }
+                return LDC;
+
             }
         }
     }

@@ -13,7 +13,10 @@ namespace JGBANK.Services.Interfaces
 
         Task<double> getSaldo(int idCuenta);
 
-       
+        Task<List<dtoTransferencia>> GetTransferenciasRealizadas(int idCuenta);
+
+        Task<List<dtoTransferencia>> GetTransferenciasRecibidas(int idCuenta);
+
     }
 }
 

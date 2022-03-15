@@ -17,7 +17,7 @@ namespace JGBANK.Controllers
         private readonly ITransferInterface _transferInterface;
         private readonly IAccountInterface _accountInterface;
         private readonly IUserInterface _userInterface;
-        public TransferController(ITransferInterface transferInterface,IAccountInterface accountInterface,  IUserInterface userInterface)
+        public TransferController(ITransferInterface transferInterface, IAccountInterface accountInterface, IUserInterface userInterface)
         {
             _transferInterface = transferInterface;
             _accountInterface = accountInterface;
@@ -26,7 +26,7 @@ namespace JGBANK.Controllers
 
         [Route("[controller]/RealizarTransferencia")]
         [HttpPost]
-        public async Task<IActionResult> RealizarTransferencia(double monto,int idCuentaSalida, string numCuentaDestino)
+        public async Task<IActionResult> RealizarTransferencia(double monto, int idCuentaSalida, string numCuentaDestino)
         {
 
             try
@@ -44,20 +44,52 @@ namespace JGBANK.Controllers
                     {
                         return BadRequest("La cuenta a la que intenta transferir no existe!");
                     }
-                    
-                    
-                    
+
+
+
                 }
                 else
                 {
                     return BadRequest("No dispone del saldo suficiente para realizar la transacción");
 
                 }
-                
+
 
             }
             catch (Exception)
             {
+                return NotFound("No responde el Servidor");
+            }
+        }
+
+        [Route("[controller]/GetTransferenciasRealizadas")]
+        [HttpGet]
+        public async Task<IActionResult> GetTransferenciasRealizadas(int idCuenta)
+        {
+            try
+            {
+                List<dtoTransferencia> LDTR = await _transferInterface.GetTransferenciasRealizadas(idCuenta);
+                return Ok(LDTR);
+            }
+            catch (Exception)
+            {
+
+                return NotFound("No responde el Servidor");
+            }
+        }
+
+        [Route("[controller]/GetTransferenciasRecibidas")]
+        [HttpGet]
+        public async Task<IActionResult> GetTransferenciasRecibidas(int idCuenta)
+        {
+            try
+            {
+                List<dtoTransferencia> LDTR = await _transferInterface.GetTransferenciasRecibidas(idCuenta);
+                return Ok(LDTR);
+            }
+            catch (Exception)
+            {
+
                 return NotFound("No responde el Servidor");
             }
         }

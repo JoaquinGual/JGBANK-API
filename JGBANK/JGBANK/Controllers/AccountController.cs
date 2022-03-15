@@ -58,6 +58,25 @@ namespace JGBANK.Controllers
                 return BadRequest("Error de Conexion con el Servidor");
             }
         }
+        [Route("[controller]/GetCuentasActivas")]
+        [HttpGet]
+        public async Task<IActionResult> GetCuentasActivas()
+        {
+            try
+            {
+                //if (!_userInterface.VerificarToken(token))
+                //{
+                //    return BadRequest("Error al validad Identidad");
+                //}
+                List<dtoCuenta> LDC = await _accountInterface.getCuentasActivas();
+                return Ok(LDC);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error de Conexion con el Servidor");
+            }
+        }
+
     }
 
 }

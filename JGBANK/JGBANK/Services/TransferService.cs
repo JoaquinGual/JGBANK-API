@@ -19,6 +19,38 @@ namespace JGBANK.Services
             }
         }
 
+        public async Task<List<dtoTransferencia>> GetTransferenciasRealizadas(int idCuenta)
+        {
+            using (var context = new JGBANKContext())
+            {
+                List<Transferencia> LTR = context.Transferencias.Where(u => u.IdCuentaSalida == idCuenta).ToList();
+                List<dtoTransferencia> LDTR = new List<dtoTransferencia>();
+
+                foreach (var tr in LTR)
+                {
+
+                    LDTR.Add(MapToDtoTransferencia(tr));
+                }
+                return LDTR;
+            }
+        }
+
+        public async Task<List<dtoTransferencia>> GetTransferenciasRecibidas(int idCuenta)
+        {
+            using (var context = new JGBANKContext())
+            {
+                List<Transferencia> LTR = context.Transferencias.Where(u => u.IdCuentaDestino == idCuenta).ToList();
+                List<dtoTransferencia> LDTR = new List<dtoTransferencia>();
+
+                foreach (var tr in LTR)
+                {
+
+                    LDTR.Add(MapToDtoTransferencia(tr));
+                }
+                return LDTR;
+            }
+        }
+
         public async Task<dtoTransferencia> RealizarTransferencia(double monto, int idCuentaSalida, int idCuentaDestino)
         {
             using (var context = new JGBANKContext())
@@ -40,6 +72,8 @@ namespace JGBANK.Services
 
                 
         }
+
+
 
         private dtoTransferencia MapToDtoTransferencia(Transferencia t)
         {
